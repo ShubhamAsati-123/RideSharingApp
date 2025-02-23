@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch"
 import Map from "@/components/map"
 import Link from "next/link"
 import { useToast } from "@/components/ui/use-toast"
+import { motion } from "framer-motion"
 
 export default function BookRide() {
   const [pickup, setPickup] = useState("")
@@ -64,9 +65,19 @@ export default function BookRide() {
   }
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 lg:p-8 min-h-screen">
-      <div className="grid lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
-        <Card className="w-[75rem] order-2 lg:order-1">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="container mx-auto p-4 sm:p-6 lg:p-8 min-h-screen"
+    >
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="grid lg:grid-cols-2 gap-6 max-w-7xl mx-auto"
+      >
+        <Card className="w-full order-2 lg:order-1">
           <CardHeader>
             <CardTitle>Book a Ride</CardTitle>
             <CardDescription>Enter your ride details</CardDescription>
@@ -107,18 +118,23 @@ export default function BookRide() {
           </CardContent>
           <CardFooter className="flex flex-col items-start">
             {estimatedFare > 0 && (
-              <div className="w-full mb-4">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="w-full mb-4"
+              >
                 <p>Estimated Fare: ${estimatedFare}</p>
                 <p>Distance: {distance.toFixed(2)} km</p>
-              </div>
+              </motion.div>
             )}
             <Button onClick={handleBookRide} className="w-full">
               Proceed to Payment
             </Button>
           </CardFooter>
         </Card>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 

@@ -16,6 +16,8 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
 
 interface SharedRide {
   id: string
@@ -31,22 +33,12 @@ interface SharedRide {
   distance: number
 }
 
-// Simulated location suggestions
 const locationSuggestions = [
-  "Downtown",
-  "Airport",
-  "Shopping Mall",
-  "University",
-  "Central Station",
-  "Business District",
-  "Sports Complex",
-  "Beach",
-  "Hospital",
-  "Park",
-].map((location) => ({
-  value: location.toLowerCase(),
-  label: location,
-}))
+  { value: "location1", label: "Central Park" },
+  { value: "location2", label: "Times Square" },
+  { value: "location3", label: "Grand Central Terminal" },
+  { value: "location4", label: "Empire State Building" },
+]
 
 export default function SharedRides() {
   const { toast } = useToast()
@@ -57,6 +49,7 @@ export default function SharedRides() {
   const [destination, setDestination] = useState("")
   const [openPickup, setOpenPickup] = useState(false)
   const [openDestination, setOpenDestination] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     // Simulate fetching rides based on location
@@ -104,22 +97,23 @@ export default function SharedRides() {
     const passengers = Number.parseInt(passengerCount)
     const totalPrice = selectedRide.price * passengers
 
-    // Here you would typically make an API call to book the ride
-    toast({
-      title: "Ride Booked",
-      description: `You have successfully booked ${passengers} seat(s) for $${totalPrice.toFixed(2)}`,
-    })
+    const rideDetails = {
+      ...selectedRide,
+      passengerCount: passengers,
+      totalPrice,
+    }
 
-    setSharedRides(
-      sharedRides.map((ride) =>
-        ride.id === selectedRide.id ? { ...ride, availableSeats: ride.availableSeats - passengers } : ride,
-      ),
-    )
-    setSelectedRide(null)
+    localStorage.setItem("currentRide", JSON.stringify(rideDetails))
+    router.push("/payment")
   }
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 lg:p-8">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="container mx-auto p-4 sm:p-6 lg:p-8"
+    >
       <h1 className="text-2xl sm:text-3xl font-bold mb-6">Available Shared Rides</h1>
 
       {/* Location Selection */}
@@ -193,7 +187,12 @@ export default function SharedRides() {
       </Card>
 
       {/* Rides List */}
-      <div className="grid gap-4 max-w-3xl mx-auto">
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="grid gap-4 max-w-3xl mx-auto"
+      >
         {sharedRides.map((ride) => (
           <Card key={ride.id}>
             <CardHeader>
@@ -263,15 +262,15 @@ export default function SharedRides() {
                         <span>${(ride.price * Number.parseInt(passengerCount)).toFixed(2)}</span>
                       </div>
                     </div>
-                    <Button onClick={confirmBooking}>Confirm Booking</Button>
+                    <Button onClick={confirmBooking}>Proceed to Payment</Button>
                   </DialogContent>
                 </Dialog>
               </div>
             </CardContent>
           </Card>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
