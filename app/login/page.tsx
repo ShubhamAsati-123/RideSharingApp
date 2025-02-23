@@ -1,47 +1,89 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
+import { login } from "@/lib/auth";
 
 export default function Login() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const router = useRouter()
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically make an API call to authenticate the user
-    // For this example, we'll just simulate a successful login
-    console.log("Logging in with:", email, password)
-    // Simulate successful login
-    localStorage.setItem("user", JSON.stringify({ email }))
-    router.push("/dashboard")
-  }
+    e.preventDefault();
+    setLoading(true);
+    console.log("username : ",username);
+    console.log("pass : ",password);
+    try {
+        // const response = await fetch("https://dummyjson.com/auth/login", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({
+        //     username: username,
+        //     password: password,
+        //     expiresInMins: 30,
+        //   }),
+        // });
+        // const data = await response.json();
+
+        const resdata = await login(username, password);
+
+        console.log(resdata);
+        console.log("Access Token : ", resdata.accessToken);
+        console.log("Refresh Token : ", resdata.refreshToken);
+        
+        router.push("/dashboard");
+        router.refresh();
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Please check your credentials and try again",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center">
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Login</CardTitle>
-          <CardDescription>Enter your credentials to access your account</CardDescription>
+          <CardDescription>
+            Enter your credentials to access your account
+          </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="username">Username</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="Your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="username"
+                  placeholder="Your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>
@@ -58,14 +100,19 @@ export default function Login() {
               </div>
             </div>
           </CardContent>
-          <CardFooter>
-            <Button type="submit" className="w-full">
-              Login
+          <CardFooter className="flex flex-col space-y-4">
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
             </Button>
+            <p className="text-sm text-center text-muted-foreground">
+              Don't have an account?{" "}
+              <Link href="/register" className="text-primary hover:underline">
+                Sign up
+              </Link>
+            </p>
           </CardFooter>
         </form>
       </Card>
     </div>
-  )
+  );
 }
-

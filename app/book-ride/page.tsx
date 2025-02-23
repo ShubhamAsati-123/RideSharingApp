@@ -48,22 +48,36 @@ export default function BookRide() {
     }
   }, [router, toast]);
 
-  const handleRouteCalculated = (calculatedDistance: number) => {
-    setDistance(calculatedDistance);
-
+  const calculateFare = (
+    calculatedDistance: number,
+    type: "economy" | "premium",
+    shared: boolean
+  ) => {
     const FARE_CONFIG = {
       economy: { baseFare: 5, costPerKm: 2 },
       premium: { baseFare: 10, costPerKm: 3 },
     };
 
-    const { baseFare, costPerKm } = FARE_CONFIG[rideType];
-    const SHARED_DISCOUNT = isSharedRide ? 0.7 : 1; // 30% discount if shared
+    const { baseFare, costPerKm } = FARE_CONFIG[type];
+    const SHARED_DISCOUNT = shared ? 0.7 : 1; // 30% discount if shared
 
     const totalFare =
       (baseFare + calculatedDistance * costPerKm) * SHARED_DISCOUNT;
 
     setEstimatedFare(Number.parseFloat(totalFare.toFixed(2)));
   };
+
+  const handleRouteCalculated = (calculatedDistance: number) => {
+    setDistance(calculatedDistance);
+    calculateFare(calculatedDistance, rideType, isSharedRide);
+  };
+
+  // 🔥 **Recalculate fare whenever `rideType` or `isSharedRide` changes**
+  useEffect(() => {
+    if (distance > 0) {
+      calculateFare(distance, rideType, isSharedRide);
+    }
+  }, [rideType, isSharedRide, distance]);
 
   const handleLocationSelected = (
     type: "pickup" | "destination",
@@ -118,6 +132,7 @@ export default function BookRide() {
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="rideType">Ride Type</Label>
                 <Select
+                  value={rideType}
                   onValueChange={(value) =>
                     setRideType(value as "economy" | "premium")
                   }
@@ -137,7 +152,7 @@ export default function BookRide() {
                 <Switch
                   id="shared-ride"
                   checked={isSharedRide}
-                  onCheckedChange={setIsSharedRide}
+                  onCheckedChange={(checked) => setIsSharedRide(checked)}
                 />
                 <Label htmlFor="shared-ride">
                   Shared Ride (Save up to 30%)

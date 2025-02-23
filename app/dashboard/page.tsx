@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { BarChart, Bar } from "recharts"
+import { getCurrentUser, logout } from "@/lib/auth"
 
 const rideData = [
   { name: "Mon", rides: 4 },
@@ -28,19 +29,51 @@ const spendingData = [
   { name: "Sun", amount: 40 },
 ]
 
+interface DummyJSONUser {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  username: string;
+  image: string;
+  address: {
+    address: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+  company: {
+    name: string;
+    title: string;
+    department: string;
+  };
+}
+
 export default function Dashboard() {
-  const [user, setUser] = useState<{ name?: string; email: string } | null>(null)
+  const [user, setUser] = useState<DummyJSONUser | null>(null);
   const router = useRouter()
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user")
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
-    } else {
-      router.push("/login")
-    }
-  }, [router])
+useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getCurrentUser();
+        if (!userData) {
+          router.push("/login");
+          return;
+        }
+        setUser(userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+        router.push("/login");
+      }
+    };
 
+    fetchUser();
+  }, [router]);
+
+  
   if (!user) {
     return <div>Loading...</div>
   }
@@ -48,7 +81,7 @@ export default function Dashboard() {
   return (
     <div className="flex min-h-screen flex-col p-4 sm:p-8 lg:p-24">
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-8 text-center">
-        Welcome, {user.name || user.email}!
+        Welcome, {user.firstName || user.email}!
       </h1>
 
       {/* Analytics Section */}
@@ -56,7 +89,9 @@ export default function Dashboard() {
         <Card>
           <CardHeader>
             <CardTitle>Weekly Rides</CardTitle>
-            <CardDescription>Your ride activity over the past week</CardDescription>
+            <CardDescription>
+              Your ride activity over the past week
+            </CardDescription>
           </CardHeader>
           <CardContent className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -74,7 +109,9 @@ export default function Dashboard() {
         <Card>
           <CardHeader>
             <CardTitle>Weekly Spending</CardTitle>
-            <CardDescription>Your ride expenses over the past week</CardDescription>
+            <CardDescription>
+              Your ride expenses over the past week
+            </CardDescription>
           </CardHeader>
           <CardContent className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -141,14 +178,14 @@ export default function Dashboard() {
       <div className="flex justify-center">
         <Button
           onClick={() => {
-            localStorage.removeItem("user")
-            router.push("/login")
+            logout()
+            router.push("/login");
           }}
         >
           Logout
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
