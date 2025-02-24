@@ -22,8 +22,8 @@ import {
 import { Switch } from "@/components/ui/switch";
 import Map from "@/components/map";
 import Link from "next/link";
-import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export default function BookRide() {
   const [pickup, setPickup] = useState("");
@@ -33,13 +33,11 @@ export default function BookRide() {
   const [estimatedFare, setEstimatedFare] = useState(0);
   const [distance, setDistance] = useState(0);
   const router = useRouter();
-  const { toast } = useToast();
 
   useEffect(() => {
     const lastRide = localStorage.getItem("lastRide");
     if (lastRide && !localStorage.getItem("lastRideRated")) {
-      toast({
-        title: "Rate your last ride",
+      toast("Rate your last ride", {
         description: "Don't forget to rate your previous ride!",
         action: (
           <Button onClick={() => router.push("/rate-ride")}>Rate Now</Button>

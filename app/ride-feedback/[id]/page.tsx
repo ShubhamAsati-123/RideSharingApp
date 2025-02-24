@@ -7,21 +7,19 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
 import { StarIcon } from "lucide-react"
+import { toast } from "sonner"
 
 export default function RideFeedback({ params }: { params: { id: string } }) {
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState("")
   const router = useRouter()
-  const { toast } = useToast()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Here you would typically make an API call to submit the feedback
     console.log("Submitting feedback:", { rideId: params.id, rating, comment })
-    toast({
-      title: "Feedback submitted",
+    toast("Feedback submitted", {
       description: "Thank you for your feedback!",
     })
     router.push("/dashboard")

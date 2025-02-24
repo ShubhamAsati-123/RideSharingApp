@@ -48,7 +48,7 @@ export default function Careers() {
             alt="Team collaboration"
             fill
             className="object-cover"
-            lazyBoundary="200px"
+            loading="lazy"            
           />
         </div>
         <div>

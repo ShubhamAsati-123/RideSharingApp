@@ -41,7 +41,6 @@ const locationSuggestions = [
 ]
 
 export default function SharedRides() {
-  const { toast } = useToast()
   const [sharedRides, setSharedRides] = useState<SharedRide[]>([])
   const [selectedRide, setSelectedRide] = useState<SharedRide | null>(null)
   const [passengerCount, setPassengerCount] = useState("1")
@@ -52,9 +51,8 @@ export default function SharedRides() {
   const router = useRouter()
 
   useEffect(() => {
-    // Simulate fetching rides based on location
     if (pickup && destination) {
-      const distance = Math.random() * 20 // Simulated distance in km
+      const distance = Math.random() * 20
       const dummyRides: SharedRide[] = [
         {
           id: "1",
@@ -66,7 +64,7 @@ export default function SharedRides() {
           destination,
           departureTime: "10:00 AM",
           availableSeats: 3,
-          price: distance * 2, // $2 per km
+          price: distance * 2,
           distance,
         },
         {

@@ -2,12 +2,7 @@
 
 import type React from "react";
 import { useState } from "react";
-import {
-  useStripe,
-  useElements,
-  CardElement,
-  PaymentElement,
-} from "@stripe/react-stripe-js";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
@@ -15,8 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader,
-  CardTitle,
   CardFooter,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -136,21 +129,16 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="w-full max-w-md mx-auto mt-4">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Payment Details</CardTitle>
-              <CardDescription>
-                Choose your preferred payment method
-              </CardDescription>
-            </div>
+      <Card className="w-full">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <CardDescription>
+              Choose your preferred payment method
+            </CardDescription>
             <Badge variant="outline" className="flex gap-1">
               <Lock className="h-3 w-3" /> Secure
             </Badge>
           </div>
-        </CardHeader>
-        <CardContent>
           <Tabs
             defaultValue="card"
             className="w-full"
@@ -158,7 +146,7 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
               setPaymentMethod(value as typeof paymentMethod)
             }
           >
-            <TabsList className="grid w-full grid-cols-3 mb-4">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
               {PAYMENT_METHODS.map(({ id, label, icon: Icon }) => (
                 <TabsTrigger
                   key={id}
@@ -179,7 +167,7 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
                   exit={{ opacity: 0, x: 20 }}
                 >
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="mt-4 p-4 border rounded-lg bg-card">
+                    <div className="p-4 border rounded-lg bg-card">
                       <CardElement options={CARD_ELEMENT_OPTIONS} />
                     </div>
                     <label className="flex items-center gap-2">
@@ -270,20 +258,20 @@ export default function PaymentForm({ amount }: PaymentFormProps) {
             </div>
           </Tabs>
         </CardContent>
-        <CardFooter className="flex-col space-y-2">
+        <CardFooter className="flex-col space-y-4 bg-muted/50 rounded-b-lg">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Shield className="h-4 w-4" />
             <span>Your payment is protected with SSL encryption</span>
           </div>
           <div className="grid grid-cols-3 gap-2 w-full">
             {["visa.svg", "mastercard.svg", "rupay.svg"].map((card) => (
-              <div key={card} className="h-6 bg-muted rounded-md" />
+              <div key={card} className="h-6 bg-background rounded-md" />
             ))}
           </div>
         </CardFooter>
       </Card>
 
-      <div className="mt-6 max-w-md mx-auto">
+      <div className="mt-6">
         <div className="flex items-start gap-2 p-4 border rounded-lg bg-muted">
           <AlertCircle className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
           <p className="text-sm text-muted-foreground">

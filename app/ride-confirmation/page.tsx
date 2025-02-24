@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
 
 export default function RideConfirmation() {
-  const rideId = "123" // This would typically come from the booking process
+  const rideId = "123";
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">

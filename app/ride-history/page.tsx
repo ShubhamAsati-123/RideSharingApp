@@ -6,11 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { MapPin, Clock, Search, CalendarRange, Navigation2, Star, Filter } from "lucide-react"
+import {  Clock, Search, Navigation2, Filter } from "lucide-react"
 
 interface Ride {
   id: string
@@ -31,7 +29,6 @@ export default function RideHistory() {
   const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
-    // In a real app, this would be an API call
     const dummyRides: Ride[] = [
       {
         id: "1",

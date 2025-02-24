@@ -23,10 +23,11 @@ export default function About() {
         </div>
         <div className="relative h-[400px] rounded-lg overflow-hidden">
           <Image
-            src="https://sjc.microlink.io/Cc5JK52kUcSQMITxuqqC7uOeSNHF1IqkjSVDU4U1q2QvdbnIDTv533NYOSIV53AhcKgRbuvkQOHdMjVFtkn-zg.jpeg"
+            src="https://res.cloudinary.com/jerrick/image/upload/v1587385623/5e9d951716ba7e001c154a49.jpg"
             alt="Urban mobility"
             fill
             className="object-cover"
+            loading="lazy"
           />
         </div>
       </div>

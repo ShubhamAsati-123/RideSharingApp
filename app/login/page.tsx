@@ -16,49 +16,36 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
 import { login } from "@/lib/auth";
+import { toast } from "sonner";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log("username : ",username);
-    console.log("pass : ",password);
     try {
-        // const response = await fetch("https://dummyjson.com/auth/login", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({
-        //     username: username,
-        //     password: password,
-        //     expiresInMins: 30,
-        //   }),
-        // });
-        // const data = await response.json();
-
         const resdata = await login(username, password);
 
         console.log(resdata);
         console.log("Access Token : ", resdata.accessToken);
         console.log("Refresh Token : ", resdata.refreshToken);
-        
         router.push("/dashboard");
         router.refresh();
+
+        toast( "Login successful", {
+          description: "You are now logged in",
+        })
     } catch (error) {
-      toast({
-        title: "Login failed",
+      toast( "Login failed", {
         description:
           error instanceof Error
             ? error.message
             : "Please check your credentials and try again",
-        variant: "destructive",
       });
     } finally {
       setLoading(false);

@@ -3,6 +3,7 @@ import "./globals.css"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import Nav from "@/components/nav"
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,11 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Nav />
           {children}
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   )
@@ -32,4 +33,3 @@ export default function RootLayout({
 
 
 
-import './globals.css'

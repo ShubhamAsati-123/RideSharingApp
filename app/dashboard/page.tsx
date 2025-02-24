@@ -1,13 +1,28 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import { BarChart, Bar } from "recharts"
-import { getCurrentUser, logout } from "@/lib/auth"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { BarChart, Bar } from "recharts";
+import { getCurrentUser, logout } from "@/lib/auth";
+import { Loader2 } from "lucide-react";
 
 const rideData = [
   { name: "Mon", rides: 4 },
@@ -17,7 +32,7 @@ const rideData = [
   { name: "Fri", rides: 6 },
   { name: "Sat", rides: 8 },
   { name: "Sun", rides: 7 },
-]
+];
 
 const spendingData = [
   { name: "Mon", amount: 25 },
@@ -27,7 +42,7 @@ const spendingData = [
   { name: "Fri", amount: 35 },
   { name: "Sat", amount: 45 },
   { name: "Sun", amount: 40 },
-]
+];
 
 interface DummyJSONUser {
   id: number;
@@ -53,9 +68,9 @@ interface DummyJSONUser {
 
 export default function Dashboard() {
   const [user, setUser] = useState<DummyJSONUser | null>(null);
-  const router = useRouter()
+  const router = useRouter();
 
-useEffect(() => {
+  useEffect(() => {
     const fetchUser = async () => {
       try {
         const userData = await getCurrentUser();
@@ -73,9 +88,12 @@ useEffect(() => {
     fetchUser();
   }, [router]);
 
-  
   if (!user) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-16 h-16 animate-spin text-gray-500" />
+      </div>
+    );
   }
 
   return (
@@ -178,7 +196,7 @@ useEffect(() => {
       <div className="flex justify-center">
         <Button
           onClick={() => {
-            logout()
+            logout();
             router.push("/login");
           }}
         >
@@ -188,4 +206,3 @@ useEffect(() => {
     </div>
   );
 }
-

@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getCurrentUser } from "@/lib/auth";
+import { Loader2 } from "lucide-react";
 
 interface DummyJSONUser {
   id: number;
@@ -60,7 +61,11 @@ export default function Profile() {
   }, [router]);
 
   if (!user) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-16 h-16 animate-spin text-gray-500" />
+      </div>
+    );
   }
 
   return (
