@@ -47,9 +47,7 @@ export default function Nav() {
           </Link>
 
           <div className="flex items-center gap-4">
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-2">
-              {/* Visible Links */}
               {visibleLinks.map((link) => (
                 <Link key={link.href} href={link.href}>
                   <Button
@@ -97,8 +95,8 @@ export default function Nav() {
               <Notifications />
             </div>
 
-            {/* Mobile Navigation */}
             <div className="md:hidden flex items-center gap-2">
+              <Notifications />
               <ThemeToggle />
               <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>

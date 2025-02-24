@@ -23,6 +23,7 @@ import {
 import { BarChart, Bar } from "recharts";
 import { getCurrentUser, logout } from "@/lib/auth";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const rideData = [
   { name: "Mon", rides: 4 },
@@ -197,6 +198,9 @@ export default function Dashboard() {
         <Button
           onClick={() => {
             logout();
+            toast("You have been logged out", {
+              description: "Redirecting to login page...",
+            });
             router.push("/login");
           }}
         >
