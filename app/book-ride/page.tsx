@@ -116,7 +116,7 @@ export default function BookRide() {
         transition={{ delay: 0.2, duration: 0.5 }}
         className="grid lg:grid-cols-2 gap-6 max-w-7xl mx-auto"
       >
-        <Card className="w-full order-2 lg:order-1">
+        <Card className="w-full lg:w-[80rem] order-2 lg:order-1">
           <CardHeader>
             <CardTitle>Book a Ride</CardTitle>
             <CardDescription>Enter your ride details</CardDescription>

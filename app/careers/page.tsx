@@ -44,10 +44,11 @@ export default function Careers() {
       <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
         <div className="relative h-[400px] rounded-lg overflow-hidden">
           <Image
-            src="https://sjc.microlink.io/Cc5JK52kUcSQMITxuqqC7uOeSNHF1IqkjSVDU4U1q2QvdbnIDTv533NYOSIV53AhcKgRbuvkQOHdMjVFtkn-zg.jpeg"
+            src="https://guardian.ng/wp-content/uploads/2024/05/Ride-hailing.jpg"
             alt="Team collaboration"
             fill
             className="object-cover"
+            lazyBoundary="200px"
           />
         </div>
         <div>
